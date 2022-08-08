@@ -28,6 +28,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.9.0",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "7.9.0",
     "@babel/preset-react": "7.9.4",
     "babel-loader": "8.1.0",
@@ -50,14 +51,18 @@
     "express": "4.17.1",
     "express-jwt": "5.3.1",
     "formidable": "1.2.2",
+    "google-map-react": "^2.2.0",
     "helmet": "3.22.0",
     "jsonwebtoken": "8.5.1",
     "lodash": "4.17.15",
     "mongoose": "5.9.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",
+    "react-geocode": "^0.2.3",
+    "react-google-autocomplete": "^2.7.0",
     "react-hot-loader": "4.12.20",
     "react-router": "5.1.2",
-    "react-router-dom": "5.1.2"
+    "react-router-dom": "5.1.2",
+    "styled-components": "^5.3.5"
   }
 }

@@ -1,7 +1,13 @@
+import { Card } from "@material-ui/core";
 import React from "react";
+import MyGoogleMap from "../LocationFind/MyGoogleMap";
 
-const Modal = () => {
-  return <div>Modal</div>;
+const Modal = ({ className }) => {
+  return (
+    <Card className={className}>
+      <MyGoogleMap />
+    </Card>
+  );
 };
 
 export default Modal;

@@ -56,6 +56,14 @@ const useStyles = makeStyles((theme) => ({
   filename: {
     verticalAlign: "super",
   },
+  modal: {
+    position: "absolute",
+    top: "4rem",
+    left: "25%",
+    height: "50%",
+    zIndex: 100,
+    width: "60%",
+  },
 }));
 
 export default function NewPost(props) {
@@ -68,6 +76,7 @@ export default function NewPost(props) {
   });
   const [modal, setModal] = useState(false);
   const jwt = auth.isAuthenticated();
+  console.log(modal);
   useEffect(() => {
     setValues({ ...values, user: auth.isAuthenticated().user });
   }, []);
@@ -99,13 +108,14 @@ export default function NewPost(props) {
 
   const handleChangeLocation = (event) => {
     event.preventDefault();
-    setModal(true);
+    setModal(!modal);
   };
   const photoURL = values.user._id
     ? "/api/users/photo/" + values.user._id
     : "/api/users/defaultphoto";
   return (
     <div className={classes.root}>
+      {modal && <Modal className={classes.modal} />}
       <Card className={classes.card}>
         <CardHeader
           avatar={<Avatar src={photoURL} />}
@@ -113,7 +123,6 @@ export default function NewPost(props) {
           className={classes.cardHeader}
         />
         <CardContent className={classes.cardContent}>
-          {modal && <Modal />}
           <TextField
             placeholder="Share your thoughts ..."
             multiline
@@ -141,7 +150,7 @@ export default function NewPost(props) {
           </label>{" "}
           <input
             accept="image/*"
-            onChange={handleChangeLocation}
+            onClick={handleChangeLocation}
             className={classes.input}
             id="icon-button-location"
             type="location"
