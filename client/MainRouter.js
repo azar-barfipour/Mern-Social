@@ -8,28 +8,30 @@ import EditProfile from "./user/EditProfile";
 import Profile from "./user/Profile";
 import PrivateRoute from "./auth/PrivateRoute";
 import Menu from "./core/Menu";
+import EditPost from "./post/EditPost";
 
 const MainRouter = () => {
   return (
     <div>
       <Menu />
-      {/* <Switch>
-        <Route exact path="/" component={Home}/>
-        <Route path="/users" component={Users}/>
-        <Route path="/signup" component={Signup}/>
-        <Route path="/signin" component={Signin}/>
-        <PrivateRoute path="/user/edit/:userId" component={EditProfile}/>
-        <Route path="/user/:userId" component={Profile}/>
-      </Switch> */}
+      <Switch>
+        <Route exact path="/" component={Home} />
+        <Route path="/users" component={Users} />
+        <Route path="/signup" component={Signup} />
+        <Route path="/signin" component={Signin} />
+        <PrivateRoute path="/user/edit/:userId" component={EditProfile} />
+        <PrivateRoute path="/edit/:postId" component={EditPost} />
+        <Route path="/user/:userId" component={Profile} />
+      </Switch>
 
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/users" element={<Users />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
         <PrivateRoute path="/user/edit/:userId" element={<EditProfile />} />
         <Route path="/user/:userId" element={<Profile />} />
-      </Routes>
+      </Routes> */}
     </div>
   );
 };
