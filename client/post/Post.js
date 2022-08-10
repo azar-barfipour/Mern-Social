@@ -122,7 +122,7 @@ export default function Post(props) {
   };
 
   const photoUrl = `/api/posts/photo/${props.post._id}`;
-
+  console.log(props.post.address);
   return (
     <Card className={classes.card}>
       <CardHeader
@@ -156,6 +156,11 @@ export default function Post(props) {
         {props.post.photo && (
           <div className={classes.photo}>
             <img className={classes.media} src={photoUrl} />
+          </div>
+        )}
+        {props.post.address && (
+          <div className={classes.photo}>
+            <p>{props.post.address}</p>
           </div>
         )}
       </CardContent>

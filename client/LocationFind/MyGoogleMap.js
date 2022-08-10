@@ -7,6 +7,7 @@ import styled from "styled-components";
 
 import AutoComplete from "./Autocomplete";
 import Marker from "./Marker";
+import { Button } from "@material-ui/core";
 
 const Wrapper = styled.main`
   width: 100%;
@@ -22,7 +23,7 @@ class MyGoogleMap extends Component {
     places: [],
     center: [],
     zoom: 9,
-    address: "",
+    address: localStorage.getItem("address"),
     draggable: true,
     lat: null,
     lng: null,
@@ -56,6 +57,12 @@ class MyGoogleMap extends Component {
       lat: value.lat,
       lng: value.lng,
     });
+  };
+  locationSubmitHandler = (e) => {
+    e.preventDefault();
+    localStorage.setItem("address", this.state.address);
+    localStorage.setItem("lat", this.state.lat);
+    localStorage.setItem("lng", this.state.lng);
   };
 
   apiHasLoaded = (map, maps) => {
@@ -104,18 +111,32 @@ class MyGoogleMap extends Component {
 
   // Get Current Location Coordinates
   setCurrentLocation() {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.setState({
-          center: [position.coords.latitude, position.coords.longitude],
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
+    if (localStorage.getItem("address")) {
+      console.log(localStorage.getItem("address"));
+      console.log("here");
+      // if ("geolocation" in navigator) {
+      // navigator.geolocation.getCurrentPosition((position) => {
+      this.setState({
+        center: [localStorage.getItem("lat"), localStorage.getItem("lng")],
+        lat: localStorage.getItem("lat"),
+        lng: localStorage.getItem("lng"),
       });
+      // });
+      // }
+    } else {
+      if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.setState({
+            center: [position.coords.latitude, position.coords.longitude],
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          });
+        });
+      }
     }
   }
-
   render() {
+    console.log(this.state.center);
     const { places, mapApiLoaded, mapInstance, mapApi } = this.state;
 
     return (
@@ -129,6 +150,34 @@ class MyGoogleMap extends Component {
             />
           </div>
         )}
+
+        <div
+          style={{
+            marginTop: "15px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {/* <div className="map-details">
+            Latitude: <span>{this.state.lat}</span>, Longitude:{" "}
+            <span>{this.state.lng}</span>
+          </div>
+          <div className="map-details">
+            Zoom: <span>{this.state.zoom}</span>
+          </div> */}
+          <div style={{ margin: "10px" }}>
+            <span style={{ fontWeight: "bold" }}>{this.state.address}</span>
+          </div>
+          <div>
+            <Button
+              style={{ background: "#fea726", margin: "1rem" }}
+              onClick={this.locationSubmitHandler}
+            >
+              Apply
+            </Button>
+          </div>
+        </div>
         <GoogleMapReact
           center={this.state.center}
           zoom={this.state.zoom}
@@ -148,23 +197,11 @@ class MyGoogleMap extends Component {
         >
           <Marker
             text={this.state.address}
+            center={this.state.center}
             lat={this.state.lat}
             lng={this.state.lng}
           />
         </GoogleMapReact>
-
-        <div style={{ marginTop: "15px" }}>
-          <div className="map-details">
-            Latitude: <span>{this.state.lat}</span>, Longitude:{" "}
-            <span>{this.state.lng}</span>
-          </div>
-          <div className="map-details">
-            Zoom: <span>{this.state.zoom}</span>
-          </div>
-          <div className="map-details">
-            Address: <span>{this.state.address}</span>
-          </div>
-        </div>
       </Wrapper>
     );
   }

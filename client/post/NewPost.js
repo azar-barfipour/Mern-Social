@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import auth from "./../auth/auth-helper";
 import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
@@ -16,6 +16,7 @@ import IconButton from "@material-ui/core/IconButton";
 import LocationOnIcon from "@material-ui/icons/LocationOn";
 import PhotoCamera from "@material-ui/icons/PhotoCamera";
 import Modal from "../core/Modal";
+import LocationContext from "../store/location-context";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,14 +77,24 @@ export default function NewPost(props) {
   });
   const [modal, setModal] = useState(false);
   const jwt = auth.isAuthenticated();
-  console.log(modal);
+  const ctx = useContext(LocationContext);
+
+  let address = localStorage.getItem("address");
+  const lat = localStorage.getItem("lat");
+  const lng = localStorage.getItem("lng");
   useEffect(() => {
     setValues({ ...values, user: auth.isAuthenticated().user });
+    address = "";
+    localStorage.clear();
   }, []);
   const clickPost = () => {
+    // ctx.saveLocationData(locationInfo);
     let postData = new FormData();
     postData.append("text", values.text);
     postData.append("photo", values.photo);
+    postData.append("address", address);
+    postData.append("lat", lat);
+    postData.append("lng", lng);
     create(
       {
         userId: jwt.user._id,
@@ -96,6 +107,8 @@ export default function NewPost(props) {
       if (data.error) {
         setValues({ ...values, error: data.error });
       } else {
+        address = "";
+        localStorage.clear();
         setValues({ ...values, text: "", photo: "" });
         props.addUpdate(data);
       }
@@ -113,6 +126,7 @@ export default function NewPost(props) {
   const photoURL = values.user._id
     ? "/api/users/photo/" + values.user._id
     : "/api/users/defaultphoto";
+
   return (
     <div className={classes.root}>
       {modal && <Modal className={classes.modal} />}
@@ -148,6 +162,9 @@ export default function NewPost(props) {
               <PhotoCamera />
             </IconButton>
           </label>{" "}
+          <span className={classes.filename}>
+            {values.photo ? values.photo.name : ""}
+          </span>
           <input
             accept="image/*"
             onClick={handleChangeLocation}
@@ -164,9 +181,7 @@ export default function NewPost(props) {
               <LocationOnIcon />
             </IconButton>
           </label>{" "}
-          <span className={classes.filename}>
-            {values.photo ? values.photo.name : ""}
-          </span>
+          <span className={classes.filename}>{address}</span>
           {values.error && (
             <Typography component="p" color="error">
               <Icon color="error" className={classes.error}>
